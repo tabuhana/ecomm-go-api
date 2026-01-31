@@ -15,8 +15,6 @@ func main() {
 		addr: ":8080",
 	}
 
-	// TODO: Logger
-
 	// TODO: Database connection
 
 	app := &application{
@@ -24,6 +22,7 @@ func main() {
 	}
 
 	if err := app.run(app.mount()); err != nil {
+		log.Panicf("Server failed to connect. Error %s", err)
 		os.Exit(1)
 	}
 }
