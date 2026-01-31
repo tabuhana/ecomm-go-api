@@ -1,18 +1,22 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading ENV file!")
-	}
 	cfg := config{
 		addr: ":8080",
+	}
+
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	if err := godotenv.Load(); err != nil {
+		slog.Error("Error loading ENV", "error", err)
 	}
 
 	// TODO: Database connection
@@ -22,7 +26,7 @@ func main() {
 	}
 
 	if err := app.run(app.mount()); err != nil {
-		log.Panicf("Server failed to connect. Error %s", err)
+		slog.Error("Server has failed to start", "error", err)
 		os.Exit(1)
 	}
 }

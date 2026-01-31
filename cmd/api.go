@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -50,14 +51,13 @@ func (app *application) run(h http.Handler) error {
 		IdleTimeout:  time.Minute,
 	}
 
-	log.Printf(`
+	fmt.Printf(`
 		╔═══════════════════════════════════╗
 		║  🚀 SERVER HAS STARTED 🚀         ║
 		╚═══════════════════════════════════╝
+		`)
 
-		Listening on port %s...
-
-`, app.config.addr)
+	slog.Info("Server Listening", "addr", app.config.addr)
 
 	return srv.ListenAndServe()
 }
